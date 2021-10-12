@@ -1,0 +1,61 @@
+//Banco de dados utilizado no projeto foi o oracle
+
+//Cria o Banco de Dados
+create database APS;
+
+//Usa o Banco de Dados
+use APS;
+
+//Sequencia para as chaves primarias das tabelas
+Create Sequence User_sequence
+increment by 1
+start with 1
+minvalue 1
+maxvalue 10000000;
+
+Create Sequence Message_sequence
+increment by 1
+start with 1
+minvalue 1
+maxvalue 10000000;
+
+//trigger para ativar as sequences User e Message quando um dado for inserido em suas respectivas tabelas
+Create or Replace Trigger USER_TRIGGER
+Before insert on USUARIOS 
+For Each Row
+ Begin
+   Select User_sequence.nextval
+   Into :new.CD_ID
+   From dual;
+ end;
+
+Create or Replace Trigger MESSAGE_TRIGGER
+Before insert on MENSAGENS
+For Each Row
+ Begin
+   Select Message_sequence.nextval
+   Into :new.CD_IDMessage
+   From dual;
+ end;
+
+//Tabela Usuário
+Create table Usuarios(
+CD_ID int primary key not null,
+NM_Usuario varchar(25),
+NR_Idade int,
+DS_Sexo char(9),
+DS_Email varchar(25),
+DS_Senha char(20),
+DS_Telefone char(9),
+DS_Celular char(10)
+);
+
+//Tabela de mensagens
+Create table Mensagens(
+CD_ID_Mensage int primary key not null,
+CD_ID int,
+DS_Mensage,
+DS_Status,
+foreing key (CD_ID) references Usuário(CD_ID)
+);
+
